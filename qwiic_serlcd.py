@@ -197,7 +197,65 @@ class QwiicSerlcd(object):
             :rtype: bool
 
         """
-
         # Basically return True if we are connected...
-
         return self.is_connected()
+
+    # ----------------------------------
+    # print()
+    #
+    # Print a string of characters to the LCD
+    def print(self, string):
+        """
+            Print a string of characters to the LCD
+
+            :param string: The string you would like to print. Aka ASCII characters. example: "Hello"
+            
+            :return: Returns true if the I2C writes were successful, otherwise False.
+            :rtype: bool
+
+        """
+        for c in string:
+                if self._i2c.writeCommand(self.address, ord(c)) == False:
+                        return False
+        return True
+
+    # ----------------------------------
+    # clearScreen()
+    #
+    # Clear the screen
+    def clearScreen(self):
+        """
+            Sends the command to clear the screen
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        return self._i2c.writeByte(self.address, SETTING_COMMAND, CLEAR_COMMAND)
+
+    # ----------------------------------
+    # setCursor()
+    #
+    # Set the cursor position to a particular column and row.
+    def setCursor(self, col, row):
+        """
+            Set the cursor position to a particular column and row.
+
+            :param col: The column postion (0-19)
+            :param row: The row postion (0-3)
+            
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """        
+        row_offsets = [0x00, 0x40, 0x14, 0x54]
+        
+        # kepp variables in bounds
+        row = max(0, row)            # row cannot be less than 0
+        row = min(row, (MAX_ROWS - 1)) # row cannot be greater than max rows
+
+        # construct the cursor "command"
+        command = LCD_SETDDRAMADDR | (col + row_offsets[row])
+
+        # send the complete bytes (special command + command)
+        return self._i2c.writeByte(self.address, SPECIAL_COMMAND, command)

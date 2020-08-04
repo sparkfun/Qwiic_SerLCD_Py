@@ -54,12 +54,17 @@ def runExample():
 			file=sys.stderr)
 		return
 
-	#myLCD.begin()
+	begin_result = myLCD.begin()
+	print(begin_result)
 	counter = 0
+	myLCD.clearScreen()
+	myLCD.print("Hello World!")
 
 	while True:
 
 		print("counter: %d" % counter)
+		myLCD.setCursor(0,1)
+		myLCD.print(str(counter))
 		counter = counter + 1
 		time.sleep(1)
 
