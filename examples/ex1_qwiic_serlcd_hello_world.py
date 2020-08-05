@@ -53,10 +53,11 @@ def runExample():
 		print("The Qwiic SerLCD device isn't connected to the system. Please check your connection", \
 			file=sys.stderr)
 		return
-
-	myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
-	#while True:
-	#	time.sleep(1)
+	myLCD.setBacklight(255, 0, 0)
+	
+	#myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
+	while True:
+		time.sleep(1)
 	myLCD.clearScreen() # clear the screen - this moves the cursor to the home position as well
 	myLCD.print("Hello World!")
 

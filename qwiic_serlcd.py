@@ -134,6 +134,20 @@ LCD_CURSORMOVE = 0x00
 LCD_MOVERIGHT = 0x04
 LCD_MOVELEFT = 0x00
 
+def map(x, in_min, in_max, out_min, out_max):
+    """
+    Map a value from one range to another
+
+        :param in_min: minimum of input range
+        :param in_max: maximum of input range
+        :param out_min: minimum of output range
+        :param out_max: maximum of output range
+        
+        :return: The value scaled to the new range
+        :rtype: int
+    """    
+    return int((x-in_min) * (out_max-out_min) / (in_max-in_min) + out_min)
+
 # define the class that encapsulates the device being created. All information associated with this
 # device is encapsulated by this class. The device class should be the only value exported
 # from this module.
@@ -152,6 +166,8 @@ class QwiicSerlcd(object):
     # Constructor
     device_name = _DEFAULT_NAME
     available_addresses = _AVAILABLE_I2C_ADDRESS
+    _displayControl = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF
+    _displayMode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT
 
     # Constructor
     def __init__(self, address=None, i2c_driver=None):
@@ -267,7 +283,7 @@ class QwiicSerlcd(object):
     # Set the contrast to a new value.
     def setContrast(self, contrast):
         """
-            Set the contrast of the LCD screen (0-255) 120 is default.
+            Set the contrast of the LCD screen (0-255)
 
             :param contrast: The new contrast value (0-255)
             
@@ -280,11 +296,61 @@ class QwiicSerlcd(object):
         # (2) CONTRAST_COMMAND
         # (3) contrast value
         #
-        # To do this, we are going to use writeWord(),
-        # so we need our "command" to include
+        # To do this, we are going to use writeBlock(),
+        # so we need our "block of bytes" to include
         # CONTRAST_COMMAND and contrast value
 
-        command = ( contrast<< 8) | CONTRAST_COMMAND 
+        block = [CONTRAST_COMMAND, contrast] 
         
         # send the complete bytes (address, settings command , contrast command, contrast value)
-        return self._i2c.writeWord(self.address, SETTING_COMMAND, command)    
+        return self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
+
+    # ----------------------------------
+    # setBacklight()
+    #
+    # Set the brightness of each backlight (red, green, blue)
+    # Uses a standard rgb byte triplit eg. (255, 0, 255)
+    def setBacklight(self, r, g, b):
+        """
+            Set the brightness of each backlight (red, green, blue)
+
+            :param red: The new red brightness value (0-255)
+            :param green: The new green brightness value (0-255)
+            :param blue: The new blue brightness value (0-255)
+            
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        # To set the backlight values, we are going to send 10 bytes
+        # They will all live in a list called "block"
+        # Let's fill up block with what we need to transmit...
+
+        block = [0,1,2,3,4,5,6,7,8,9]
+
+        # map our incoming values (0-255) to the backlight command range (0-29)
+        red = 128 + map(r, 0, 255, 0, 29)
+        green = 158 + map(g, 0, 255, 0, 29)
+        blue = 188 + map(b, 0, 255, 0, 29)
+
+        # Turn display off to hide confirmation messages
+        self._displayControl &= ~LCD_DISPLAYON
+        block[0] = SPECIAL_COMMAND
+        block[1] = (LCD_DISPLAYCONTROL | self._displayControl)
+
+        #Set the red, green and blue values
+        block[2] = SETTING_COMMAND
+        block[3] = red
+        block[4] = SETTING_COMMAND
+        block[5] = green
+        block[6] = SETTING_COMMAND
+        block[7] = blue
+
+        # Turn display back on and end
+        self._displayControl |= LCD_DISPLAYON
+        block[8] = SPECIAL_COMMAND
+        block[9] = (LCD_DISPLAYCONTROL | self._displayControl)
+        
+        # send the complete bytes (address, settings command , contrast command, contrast value)
+        return self._i2c.writeBlock(self.address, SETTING_COMMAND, block)        
+    
