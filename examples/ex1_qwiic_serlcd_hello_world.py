@@ -54,11 +54,13 @@ def runExample():
 			file=sys.stderr)
 		return
 
-	begin_result = myLCD.begin()
-	print(begin_result)
-	counter = 0
-	myLCD.clearScreen()
+	myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
+	#while True:
+	#	time.sleep(1)
+	myLCD.clearScreen() # clear the screen - this moves the cursor to the home position as well
 	myLCD.print("Hello World!")
+
+	counter = 0
 
 	while True:
 

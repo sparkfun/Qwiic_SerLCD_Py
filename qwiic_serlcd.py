@@ -259,3 +259,32 @@ class QwiicSerlcd(object):
 
         # send the complete bytes (special command + command)
         return self._i2c.writeByte(self.address, SPECIAL_COMMAND, command)
+
+
+    # ----------------------------------
+    # setContrast()
+    #
+    # Set the contrast to a new value.
+    def setContrast(self, contrast):
+        """
+            Set the contrast of the LCD screen (0-255) 120 is default.
+
+            :param contrast: The new contrast value (0-255)
+            
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        # To set the contrast we need to send 3 bytes:
+        # (1) SETTINGS_COMMAND
+        # (2) CONTRAST_COMMAND
+        # (3) contrast value
+        #
+        # To do this, we are going to use writeWord(),
+        # so we need our "command" to include
+        # CONTRAST_COMMAND and contrast value
+
+        command = ( contrast<< 8) | CONTRAST_COMMAND 
+        
+        # send the complete bytes (address, settings command , contrast command, contrast value)
+        return self._i2c.writeWord(self.address, SETTING_COMMAND, command)    
