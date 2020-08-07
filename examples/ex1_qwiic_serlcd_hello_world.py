@@ -5,7 +5,10 @@
 # Simple Example demonstrating how to print "hello world" and a counting number to the SerLCD (Qwiic).
 #------------------------------------------------------------------------
 #
-# Written by  SparkFun Electronics, August 2020
+# Written by SparkFun Electronics, August 2020
+#
+# Ported from Arduino Library code with many contributions from
+# Gaston Williams - August 29, 2018
 # 
 # This python library supports the SparkFun Electroncis qwiic 
 # qwiic sensor/board ecosystem on a Raspberry Pi (and compatable) single
@@ -16,7 +19,7 @@
 # Do you like this library? Help support SparkFun. Buy a board!
 #
 #==================================================================================
-# Copyright (c) 2019 SparkFun Electronics
+# Copyright (c) 2020 SparkFun Electronics
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy 
 # of this software and associated documentation files (the "Software"), to deal 

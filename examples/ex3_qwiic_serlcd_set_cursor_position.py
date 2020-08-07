@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------------
-# ex2_qwiic_serlcd_backlight.py
+# ex3_qwiic_serlcd_set_cursor_position.py
 #
-# Simple Example demonstrating various backlight controls on the SerLCD (Qwiic).
+# Simple Example demonstrating cursor posistion controls on the SerLCD (Qwiic).
 #
-# This sketch changes the backlight color and displays text using
-# the OpenLCD functions. This works with the original version of 
-# SerLCD. See FastBacklight example for version 1.1 and later.
+# This sketch randomly picks a cursor position, goes to
+# that position using the setCursor() method, and prints a character
 #------------------------------------------------------------------------
 #
 # Written by SparkFun Electronics, August 2020
@@ -43,17 +42,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 #==================================================================================
-# Example 2
+# Example 3
 #
 
 from __future__ import print_function
 import qwiic_serlcd
 import time
 import sys
+import random
+
 
 def runExample():
 
-	print("\nSparkFun Qwiic SerLCD   Example 2\n")
+	print("\nSparkFun Qwiic SerLCD   Example 3\n")
 	myLCD = qwiic_serlcd.QwiicSerlcd()
 
 	if myLCD.connected == False:
@@ -63,59 +64,33 @@ def runExample():
 
 	myLCD.setBacklight(255, 255, 255) # Set backlight to bright white
 	myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
+	myLCD.clearScreen()
 
 	time.sleep(1) # give a sec for system messages to complete
+
+	# These constants won't change. But you can change the size of
+	# your LCD using them:
+	numRows = 2
+	# numRows = 4
+	numCols = 16
+	# numCols = 20
+
+	thisLetter = "a"
 	
 	while True:
-		myLCD.setBacklight(0, 0, 0) # black is off
-		myLCD.clearScreen() # Clear the display - this moves the cursor to home position as well
-		myLCD.print("Black (off)")
-		time.sleep(5)
+		randomColumn = random.randint(0, numCols)
+		randomRow = random.randint(0, numRows)
 
-		myLCD.setBacklight(255, 0, 0) # bright red
-		myLCD.clearScreen()
-		myLCD.print("Red")
-		time.sleep(5)
+		# set the cursor position:
+		myLCD.setCursor(randomColumn, randomRow)
 
-		myLCD.setBacklight(0xFF, 0x8C, 0x00) # orange
-		myLCD.clearScreen()
-		myLCD.print("Orange")
-		time.sleep(5)
+		# print the letter:
+		myLCD.print(thisLetter) # print to screen
+		time.sleep(0.2)
 
-		myLCD.setBacklight(255, 255, 0) # bright yellow
-		myLCD.clearScreen()
-		myLCD.print("Yellow")
-		time.sleep(5)
-
-		myLCD.setBacklight(0, 255, 0) # bright green
-		myLCD.clearScreen()
-		myLCD.print("Green")
-		time.sleep(5)
-
-		myLCD.setBacklight(0, 0, 255) # bright blue
-		myLCD.clearScreen()
-		myLCD.print("Blue")
-		time.sleep(5)
-
-		myLCD.setBacklight(0x4B, 0x00, 0x82) # indigo, a kind of dark purplish blue
-		myLCD.clearScreen()
-		myLCD.print("Indigo")
-		time.sleep(5)
-
-		myLCD.setBacklight(0xA0, 0x20, 0xF0) # violet
-		myLCD.clearScreen()
-		myLCD.print("Violet")
-		time.sleep(5)
-
-		myLCD.setBacklight(0x80, 0x80, 0x80) # grey
-		myLCD.clearScreen()
-		myLCD.print("Grey")
-		time.sleep(5)
-
-		myLCD.setBacklight(255, 255, 255) # bright white
-		myLCD.clearScreen()
-		myLCD.print("White")
-		time.sleep(5)
+		thisLetter = chr(ord(thisLetter) + 1)
+		if thisLetter > "z":
+			thisLetter = "a" # Wrap the variable
 
 if __name__ == '__main__':
 	try:
