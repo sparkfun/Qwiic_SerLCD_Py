@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------------
-# ex3_qwiic_serlcd_set_cursor_position.py
+# ex5_qwiic_serlcd_enable_cursor.py
 #
-# Simple Example demonstrating cursor posistion controls on the SerLCD (Qwiic).
+# Simple Example demonstrating the enable and disable cursor controls on the SerLCD (Qwiic).
 #
-# This sketch randomly picks a cursor position, goes to
-# that position using the setCursor() method, and prints a character
+# This example prints "Hello World!" to the LCD and
+# uses the cursor()  and noCursor() methods to turn
+# on and off the cursor.
 #------------------------------------------------------------------------
 #
 # Written by SparkFun Electronics, August 2020
@@ -42,19 +43,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 #==================================================================================
-# Example 3
+# Example 5
 #
 
 from __future__ import print_function
 import qwiic_serlcd
 import time
 import sys
-import random
-
 
 def runExample():
 
-	print("\nSparkFun Qwiic SerLCD   Example 3\n")
+	print("\nSparkFun Qwiic SerLCD   Example 5\n")
 	myLCD = qwiic_serlcd.QwiicSerlcd()
 
 	if myLCD.connected == False:
@@ -65,38 +64,28 @@ def runExample():
 	myLCD.setBacklight(255, 255, 255) # Set backlight to bright white
 	myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
 	myLCD.clearScreen()
+	myLCD.cursor() # Turn on the underline cursor
 
 	time.sleep(1) # give a sec for system messages to complete
-
-	# These constants won't change. But you can change the size of
-	# your LCD using them:
-	numRows = 2
-	# numRows = 4
-	numCols = 16
-	# numCols = 20
-
-	thisLetter = "a"
+	myLCD.print("Hello World!")
 	
 	while True:
-		randomColumn = random.randint(0, numCols)
-		randomRow = random.randint(0, numRows)
+		# turn off the cursor
+		print("Cursor OFF")
+		myLCD.noCursor()
+		time.sleep(1)
+		
+		# turn on the cursor
+		print("Cursor ON")
 
-		# set the cursor position:
-		myLCD.setCursor(randomColumn, randomRow)
-
-		# print the letter:
-		myLCD.print(thisLetter) # print to screen
-		time.sleep(0.2)
-
-		thisLetter = chr(ord(thisLetter) + 1)
-		if thisLetter > "z":
-			thisLetter = "a" # Wrap the variable
+		myLCD.cursor()
+		time.sleep(1)
 
 if __name__ == '__main__':
 	try:
 		runExample()
 	except (KeyboardInterrupt, SystemExit) as exErr:
-		print("\nEnding Example 3")
+		print("\nEnding Example 5")
 		sys.exit(0)
 
 

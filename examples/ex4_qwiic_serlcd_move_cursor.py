@@ -98,7 +98,7 @@ if __name__ == '__main__':
 	try:
 		runExample()
 	except (KeyboardInterrupt, SystemExit) as exErr:
-		print("\nEnding Example 1")
+		print("\nEnding Example 4")
 		sys.exit(0)
 
 
