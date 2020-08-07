@@ -454,3 +454,33 @@ class QwiicSerlcd(object):
         """
         self._displayControl &= ~LCD_CURSORON
         return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
+
+    # ----------------------------------
+    # blink()
+    #
+    # Turn the blink cursor on.
+    def blink(self):
+        """
+            Turn the blink cursor on.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl |= LCD_BLINKON
+        return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
+
+    # ----------------------------------
+    # noBlink()
+    #
+    # Turn the blink cursor off.
+    def noBlink(self):
+        """
+            Turn the blink cursor off.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl &= ~LCD_BLINKON
+        return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
