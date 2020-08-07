@@ -247,7 +247,7 @@ class QwiicSerlcd(object):
             :rtype: bool
 
         """
-        return self._i2c.writeByte(self.address, SETTING_COMMAND, CLEAR_COMMAND)
+        return self.command(CLEAR_COMMAND)
 
     # ----------------------------------
     # setCursor()
@@ -354,3 +354,103 @@ class QwiicSerlcd(object):
         # send the complete bytes (address, settings command , contrast command, contrast value)
         return self._i2c.writeBlock(self.address, SETTING_COMMAND, block)        
     
+    # ----------------------------------
+    # specialCommand()
+    #
+    # Send one (or multiples of) special command to the display.
+    # Used by other functions.
+    def specialCommand(self, command, count = 1):
+        """
+            Send one (or multiple) special commands to the display.
+            Used by other functions.
+
+            :param command: Command to send (a single byte)
+            :param count: Number of times to send the command (if ommited, then default is once)
+            
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        for i in range(0, count):
+            # send the complete bytes (special command + command)
+            return self._i2c.writeByte(self.address, SPECIAL_COMMAND, command)
+    
+    # ----------------------------------
+    # command()
+    #
+    # Send one setting command to the display.
+    # Used by other functions.
+    def command(self, command):
+        """
+            Send one setting command to the display.
+            Used by other functions.
+
+            :param command: Command to send (a single byte)
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        return self._i2c.writeByte(self.address, SETTING_COMMAND, command)
+
+    # ----------------------------------
+    # moveCursorLeft()
+    #
+    # Move the cursor one or more characters to the left.
+    def moveCursorLeft(self, count = 1):
+        """
+            Move the cursor one or more characters to the left.
+
+            :param count: Number of character spaces you'd like to move
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        return self.specialCommand(LCD_CURSORSHIFT | LCD_CURSORMOVE | LCD_MOVELEFT, count)
+
+    # ----------------------------------
+    # moveCursorRight()
+    #
+    # Move the cursor one or more characters to the right.
+    def moveCursorRight(self, count = 1):
+        """
+            Move the cursor one or more characters to the right.
+
+            :param count: Number of character spaces you'd like to move
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        return self.specialCommand(LCD_CURSORSHIFT | LCD_CURSORMOVE | LCD_MOVERIGHT, count)
+
+    # ----------------------------------
+    # cursor()
+    #
+    # Turn the underline cursor on.
+    def cursor(self):
+        """
+            Turn the underline cursor on.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl |= LCD_CURSORON
+        return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
+
+    # ----------------------------------
+    # noCursor()
+    #
+    # Turn the underline cursor off.
+    def noCursor(self):
+        """
+            Turn the underline cursor off.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl &= ~LCD_CURSORON
+        return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
