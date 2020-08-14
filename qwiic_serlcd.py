@@ -484,3 +484,35 @@ class QwiicSerlcd(object):
         """
         self._displayControl &= ~LCD_BLINKON
         return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
+
+    # ----------------------------------
+    # scrollDisplayLeft()
+    #
+    # Scroll the display one or multiple characters to the left, without changing the text.
+    def scrollDisplayLeft(self, count = 1):
+        """
+            Scroll the display one or multiple characters to the left, without changing the text.
+
+            :param count: Number of character spaces you'd like to scroll
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        return self.specialCommand(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT, count)
+
+    # ----------------------------------
+    # scrollDisplayRight()
+    #
+    # Scroll the display one or multiple characters to the right, without changing the text.
+    def scrollDisplayRight(self, count = 1):
+        """
+            Scroll the display one or multiple characters to the right, without changing the text.
+
+            :param count: Number of character spaces you'd like to scroll
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        return self.specialCommand(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT, count)
