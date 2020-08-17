@@ -651,3 +651,33 @@ class QwiicSerlcd(object):
         result = self.command(35 + location)
         time.sleep(0.05)
         return result
+
+    # ----------------------------------
+    # display()
+    #
+    # Turn the display on quickly.
+    def display(self):
+        """
+            Turn the display on quickly.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl |= LCD_DISPLAYON
+        return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
+
+    # ----------------------------------
+    # noDisplay()
+    #
+    # Turn the display off quickly.
+    def noDisplay(self):
+        """
+            Turn the display off quickly.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl &= ~LCD_DISPLAYON
+        return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
