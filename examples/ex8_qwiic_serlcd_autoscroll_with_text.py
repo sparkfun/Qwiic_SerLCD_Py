@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------------
-# ex7_qwiic_serlcd_scroll.py
+# ex8_qwiic_serlcd_autoscroll_with_text.py
 #
-# Simple example demonstrating the scroll controls on the SerLCD (Qwiic).
+# Simple example demonstrating the autoscroll feature on the SerLCD (Qwiic).
 #
-# This example prints "Hello World!" to the LCD and uses the
-# scrollDisplayLeft() and scrollDisplayRight() methods to scroll
-# the text.
+# This example demonstrates the use of the autoscroll()
+# and noAutoscroll() functions to make new text scroll or not.
 #------------------------------------------------------------------------
 #
 # Written by SparkFun Electronics, August 2020
@@ -43,7 +42,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 #==================================================================================
-# Example 7
+# Example 8
 #
 
 from __future__ import print_function
@@ -53,7 +52,7 @@ import sys
 
 def runExample():
 
-	print("\nSparkFun Qwiic SerLCD   Example 7\n")
+	print("\nSparkFun Qwiic SerLCD   Example 8\n")
 	myLCD = qwiic_serlcd.QwiicSerlcd()
 
 	if myLCD.connected == False:
@@ -63,37 +62,32 @@ def runExample():
 
 	myLCD.setBacklight(255, 255, 255) # Set backlight to bright white
 	myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
-	myLCD.clearScreen()
-
+	myLCD.begin() # call this for default settings (no
+	myLCD.leftToRight()
 	time.sleep(1) # give a sec for system messages to complete
-	myLCD.print("Hello World!")
 	
 	while True:
-		# scroll 13 positions (string length) to the left
-		# to move it offscreen left:
-		for i in range(13):
-			myLCD.scrollDisplayLeft() # scroll one position left
-			time.sleep(0.15) # wait a bit
+		myLCD.setCursor(0, 0) # set the cursor to (0,0)
 
-		# scroll 29 positions (string length + display length) to the right
-		# to move it offscreen right:
-		for i in range(29):
-			myLCD.scrollDisplayRight() # scroll one position right
-			time.sleep(0.15) # wait a bit
+		for thisChar in range(10): # print from 0 to 9
+			myLCD.print(str(thisChar))
+			time.sleep(0.5)
 
-		# scroll 16 positions (display length + string length) to the left
-		# to move it back to center:
-		for i in range(16):
-			myLCD.scrollDisplayLeft() # scroll one position left
-			time.sleep(0.15) # wait a bit
+		myLCD.autoscroll() # set the display to automatically scroll
 
-		time.sleep(1) # delay at the end of the full loop
+		for thisChar in range(0,10): # print from 0 to 9
+			myLCD.setCursor(10+thisChar,1)
+			myLCD.print(str(thisChar))
+			time.sleep(0.5)
+  
+		myLCD.noAutoscroll() # turn off automatic scrolling	
+		myLCD.clearScreen() # clear screen for the next loop
 
 if __name__ == '__main__':
 	try:
 		runExample()
 	except (KeyboardInterrupt, SystemExit) as exErr:
-		print("\nEnding Example 7")
+		print("\nEnding Example 8")
 		sys.exit(0)
 
 

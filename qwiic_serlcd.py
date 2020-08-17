@@ -70,6 +70,7 @@ New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.s
 #-----------------------------------------------------------------------------
 from __future__ import print_function
 import struct
+import time
 
 import qwiic_i2c
 
@@ -201,6 +202,7 @@ class QwiicSerlcd(object):
         return qwiic_i2c.isDeviceConnected(self.address)
 
     connected = property(is_connected)
+
     # ----------------------------------
     # begin()
     #
@@ -213,8 +215,15 @@ class QwiicSerlcd(object):
             :rtype: bool
 
         """
-        # Basically return True if we are connected...
-        return self.is_connected()
+        # set default settings, as defined in constructor
+        result0 = self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
+        time.sleep(1)
+        result1 = self.specialCommand(LCD_ENTRYMODESET | self._displayMode)
+        time.sleep(1)
+        result2 = self.clearScreen()
+        time.sleep(1)
+
+        return (bool(result0) & bool(result1) & bool(result2))
 
     # ----------------------------------
     # print()
@@ -247,7 +256,9 @@ class QwiicSerlcd(object):
             :rtype: bool
 
         """
-        return self.command(CLEAR_COMMAND)
+        result = self.command(CLEAR_COMMAND)
+        time.sleep(0.01)
+        return result
 
     # ----------------------------------
     # setCursor()
@@ -303,7 +314,9 @@ class QwiicSerlcd(object):
         block = [CONTRAST_COMMAND, contrast] 
         
         # send the complete bytes (address, settings command , contrast command, contrast value)
-        return self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
+        result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
+        time.sleep(0.01)
+        return result
 
     # ----------------------------------
     # setBacklight()
@@ -352,7 +365,9 @@ class QwiicSerlcd(object):
         block[9] = (LCD_DISPLAYCONTROL | self._displayControl)
         
         # send the complete bytes (address, settings command , contrast command, contrast value)
-        return self._i2c.writeBlock(self.address, SETTING_COMMAND, block)        
+        result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
+        time.sleep(0.05)
+        return result
     
     # ----------------------------------
     # specialCommand()
@@ -373,7 +388,9 @@ class QwiicSerlcd(object):
         """
         for i in range(0, count):
             # send the complete bytes (special command + command)
-            return self._i2c.writeByte(self.address, SPECIAL_COMMAND, command)
+            result = self._i2c.writeByte(self.address, SPECIAL_COMMAND, command)
+        time.sleep(0.05)
+        return result
     
     # ----------------------------------
     # command()
@@ -391,7 +408,9 @@ class QwiicSerlcd(object):
             :rtype: bool
 
         """
-        return self._i2c.writeByte(self.address, SETTING_COMMAND, command)
+        result = self._i2c.writeByte(self.address, SETTING_COMMAND, command)
+        time.sleep(0.01)
+        return result
 
     # ----------------------------------
     # moveCursorLeft()
@@ -516,3 +535,64 @@ class QwiicSerlcd(object):
 
         """
         return self.specialCommand(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT, count)
+
+    # ----------------------------------
+    # autoscroll()
+    #
+    # Turn autoscrolling on. This will right-justify text from the cursor.
+    def autoscroll(self):
+        """
+            Turn autoscrolling on. This will right-justify text from the cursor.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl |= LCD_ENTRYSHIFTINCREMENT
+        return self.specialCommand(LCD_ENTRYMODESET | self._displayControl)
+
+    # ----------------------------------
+    # noAutoscroll()
+    #
+    # Turn autoscrolling off.
+    def noAutoscroll(self):
+        """
+            Turn autoscrolling off.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl &= ~LCD_ENTRYSHIFTINCREMENT
+        return self.specialCommand(LCD_ENTRYMODESET | self._displayControl)
+
+    # ----------------------------------
+    # leftToRight()
+    #
+    # Set the text to flow from left to right.  This is the direction
+    # that is common to most Western languages.
+    def leftToRight(self):
+        """
+            Set the text to flow from left to right.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl |= LCD_ENTRYLEFT
+        return self.specialCommand(LCD_ENTRYMODESET | self._displayControl)
+
+    # ----------------------------------
+    # rightToLeft()
+    #
+    # Set the text to flow from right to left.
+    def rightToLeft(self):
+        """
+            Set the text to flow from right to left
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        self._displayControl &= ~LCD_ENTRYLEFT
+        return self.specialCommand(LCD_ENTRYMODESET | self._displayControl)
