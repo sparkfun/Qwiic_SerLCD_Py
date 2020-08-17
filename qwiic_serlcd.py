@@ -262,6 +262,26 @@ class QwiicSerlcd(object):
         return result
 
     # ----------------------------------
+    # home()
+    #
+    # Send the home command to the display.  This returns the cursor
+    # to return to the beginning of the display, without clearing
+    # the display.
+    def home(self):
+        """
+            Send the home command to the display.  This returns the cursor
+            to return to the beginning of the display, without clearing
+            the display.
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        result = self.specialCommand(LCD_RETURNHOME)
+        time.sleep(0.01)
+        return result
+
+    # ----------------------------------
     # setCursor()
     #
     # Set the cursor position to a particular column and row.
