@@ -242,6 +242,7 @@ class QwiicSerlcd(object):
         for c in string:
                 if self._i2c.writeCommand(self.address, ord(c)) == False:
                         return False
+                time.sleep(0.01)
         return True
 
     # ----------------------------------
@@ -596,3 +597,57 @@ class QwiicSerlcd(object):
         """
         self._displayControl &= ~LCD_ENTRYLEFT
         return self.specialCommand(LCD_ENTRYMODESET | self._displayControl)
+
+    # ----------------------------------
+    # createChar()
+    #
+    # Create a customer character
+    # byte   location - character number 0 to 7
+    # byte[] charmap  - byte array for character
+    def createChar(self, location, charmap):
+        """
+            Create a customer character
+            :param location: character number 0 to 7
+            :param charmap: byte array for character
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        location &= 0x7 # we only have 8 locations 0-7
+
+        # create a block of data bytes to send to the screen
+        # This will include the location (with the addition of 27 to let the screen know)
+        # and the 8 bytes of charmap
+        block = [0,1,2,3,4,5,6,7,8,9]
+
+        block[0] = (27 + location) # command type/location
+
+        for i in range(1,9):
+            block[i] = charmap[i-1]
+
+        # send the complete bytes (address, settings command , write char command (includes location), charmap)
+        result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
+        time.sleep(0.05)
+        return result
+
+    # ----------------------------------
+    # writeChar()
+    #
+    # Write a customer character to the display
+    # byte   location - character number 0 to 7
+    def writeChar(self, location):
+        """
+            Write a customer character to the display
+            :param location: character number 0 to 7
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+        location &= 0x7 # we only have 8 locations 0-7
+
+        # send command
+        result = self.command(35 + location)
+        time.sleep(0.05)
+        return result
