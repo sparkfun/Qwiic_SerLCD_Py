@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------------
-# ex13_qwiic_serlcd_fast_backlight.py
+# ex14_qwiic_serlcd_show_firmware_version.py
 #
-# This example shows how to use the fastBacklight() method.
-# It is nice because it doesn't show system messages, and sends the values
-# in one concatinated block of data (a single command for all 3 values).
+# This example prints the devices firmware version on the screen.
 #
 #------------------------------------------------------------------------
 #
@@ -42,7 +40,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 #==================================================================================
-# Example 13
+# Example 14
 #
 
 from __future__ import print_function
@@ -52,7 +50,7 @@ import sys
 
 def runExample():
 
-	print("\nSparkFun Qwiic SerLCD   Example 13\n")
+	print("\nSparkFun Qwiic SerLCD   Example 14\n")
 	print("\nType CTRL+C to end.\n")
 	myLCD = qwiic_serlcd.QwiicSerlcd()
 
@@ -61,6 +59,7 @@ def runExample():
 			file=sys.stderr)
 		return
 
+	myLCD.setBacklight(255, 255, 255) # bright white
 	myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
 	myLCD.begin() # call this for default settings (no
 	myLCD.leftToRight()
@@ -68,21 +67,14 @@ def runExample():
 	time.sleep(1) # give a sec for system messages to complete
 
 	while True:
-		myLCD.setFastBacklight(255, 0, 0) # bright red
-		myLCD.clearScreen()
-		myLCD.print("Red")
-		time.sleep(1)
-
-		myLCD.setFastBacklight(0xFF, 0x8C, 0x00) # orange
-		myLCD.clearScreen()
-		myLCD.print("Orange")
-		time.sleep(1)
+		myLCD.command(ord(',')) # send the comma to display the frimware version
+		time.sleep(0.5) # Firmware will be displayed for 500ms, so keep re-printing it
 
 if __name__ == '__main__':
 	try:
 		runExample()
 	except (KeyboardInterrupt, SystemExit) as exErr:
-		print("\nEnding Example 13")
+		print("\nEnding Example 14")
 		sys.exit(0)
 
 
