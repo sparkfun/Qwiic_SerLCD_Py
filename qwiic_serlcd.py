@@ -734,3 +734,133 @@ class QwiicSerlcd(object):
         result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
         time.sleep(0.01)
         return result
+
+    # ----------------------------------
+    # enableSystemMessages()
+    #
+    # Enable system messages
+    # This allows user to see printing messages like'Contrast: 5'
+    def enableSystemMessages(self):
+        """
+            Enable system messages
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+
+        # send command
+        result = self.command(ENABLE_SYSTEM_MESSAGE_DISPLAY)
+        time.sleep(0.01)
+        return result
+
+    # ----------------------------------
+    # disableSystemMessages()
+    #
+    # Disable system messages
+    # This allows user to disable printing messages like'Contrast: 5'
+    def disableSystemMessages(self):
+        """
+            Disable system messages
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+
+        # send command
+        result = self.command(DISABLE_SYSTEM_MESSAGE_DISPLAY)
+        time.sleep(0.01)
+        return result
+
+    # ----------------------------------
+    # enableSplash()
+    #
+    # Enable splash screen at power on
+    def enableSplash(self):
+        """
+            Enable splash screen at power on
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+
+        # send command
+        result = self.command(ENABLE_SPLASH_DISPLAY)
+        time.sleep(0.01)
+        return result
+
+    # ----------------------------------
+    # disableSplash()
+    #
+    # Disable splash screen at power on
+    def disableSplash(self):
+        """
+            Disable splash screen at power on
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+
+        # send command
+        result = self.command(DISABLE_SPLASH_DISPLAY)
+        time.sleep(0.01)
+        return result
+
+    # ----------------------------------
+    # saveSplash()
+    #
+    # Save the current display as the splash
+    # Saves whatever is currently being displayed into EEPROM
+    # This will be displayed at next power on as the splash screen
+    def saveSplash(self):
+        """
+            Save the current display as the splash
+            Saves whatever is currently being displayed into EEPROM
+            This will be displayed at next power on as the splash screen
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+
+        # send command
+        result = self.command(SAVE_CURRENT_DISPLAY_AS_SPLASH)
+        time.sleep(0.01)
+        return result
+
+    # ----------------------------------
+    # setAddress()
+    #
+    # Change the I2C Address. 0x72 is the default.
+    # Note that this change is persistent.  If anything
+    # goes wrong you may need to do a hardware reset
+    # to unbrick the display.
+    #
+    # byte   new_addr - new i2c address
+    def setAddress(self, new_addr):
+        """
+            Change the I2C Address. 0x72 is the default.
+            Note that this change is persistent.  If anything
+            goes wrong you may need to do a hardware reset
+            to unbrick the display.
+            :param new_addr: new i2c address
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+
+        # create a block of data bytes to send to the screen
+        # This will include the ADDRESS_COMMAND, and the new address byte value.
+        block = [0,1]
+
+        block[0] = ADDRESS_COMMAND # command
+        block[1] = new_addr
+
+        # send the complete bytes (address, settings command , address command , new_addr byte)
+        result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
+        time.sleep(0.05)
+        return result
