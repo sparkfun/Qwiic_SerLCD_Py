@@ -701,3 +701,36 @@ class QwiicSerlcd(object):
         """
         self._displayControl &= ~LCD_DISPLAYON
         return self.specialCommand(LCD_DISPLAYCONTROL | self._displayControl)
+
+    # ----------------------------------
+    # setFastBacklight()
+    #
+    # Set backlight with no LCD messages or delays
+    # byte   r - red backlight value 0-255
+    # byte   g - green backlight value 0-255
+    # byte   b - blue backlight value 0-255
+    def setFastBacklight(self, r, g, b):
+        """
+            Set backlight with no LCD messages or delays
+            :param r: red backlight value 0-255
+            :param g: green backlight value 0-255
+            :param b: blue backlight value 0-255
+
+            :return: Returns true if the I2C write was successful, otherwise False.
+            :rtype: bool
+
+        """
+
+        # create a block of data bytes to send to the screen
+        # This will include the SET_RGB_COMMAND, and three bytes of backlight values
+        block = [0,1,2,3]
+
+        block[0] = SET_RGB_COMMAND # command
+        block[1] = r
+        block[2] = g
+        block[3] = b
+
+        # send the complete bytes (address, settings command , rgb command , red byte, green byte, blue byte)
+        result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
+        time.sleep(0.01)
+        return result
