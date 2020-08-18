@@ -1,28 +1,36 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------------
-# ex16_qwiic_serlcd_set_splash.py
+# ex17_qwiic_serlcd_change_i2c_address.py
 #
-# This example demonstrates how to create your own custom splash screen.
+# This example demonstrates how to change the i2c address on your LCD.
+# Note, once you change the address, then you will need to intatiate your class
+# using your new address.
 #
-# This is done by first writing the text you want as your splash to the display,
-# then 'saving' it as a splash screen.
+# Once you have changed the address, you can try using the optional instantiation
+# line of code that is currently commented out.
 #
-# You can also disable or enable the displaying of the splash screen.
-#
-# Note - The disableSplash() and enableSplash() commands  
-# are only supported on SerLCD v1.2 and above. But you can still use the
-# toggle splash command (Ctrl+i) to enable/disable the splash.
+# There is a set range of available addresses from 0x07 to 0x78, so make sure your 
+# chosen address falls within this range. 
+# 
+# The next thing to note is that when you change the address you'll
+# need to call an instance of the QwiicSerlcd class that includes your new
+# address, like so: "myLCD = qwiic_serlcd.QwiicSerlcd(address=YOUR_NEW_ADDRESS_HERE)"
+# so that the new address is fed to all the available functions. 
+# 
+# Finally if for some reason you've forgotten your new address. No big deal, run a 
+# hardware reset on your screen to get it back to the default address (0x72).
+# To cause a hardware reset, simply tie the RX pin LOW, and they cycle power 
+# (while continuing to hold RX low). Then release RX, and cycle power again.
 #
 #------------------------------------------------------------------------
 #
 # Written by SparkFun Electronics, August 2020
 #
-# Originally written for the Arduino Library by Nathan Seidle 2/16/2019
-#
-# Ported to this python example by Pete Lewis 8/18/2020
-#
 # Ported from Arduino Library code with many contributions from
 # Gaston Williams - August 29, 2018
+#
+# Some code/comments/ideas ported from the Qwiic Quad Relay Arduino Library
+# Written by Elias Santistevan, July 2019
 # 
 # This python library supports the SparkFun Electroncis qwiic 
 # qwiic sensor/board ecosystem on a Raspberry Pi (and compatable) single
@@ -53,7 +61,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 # SOFTWARE.
 #==================================================================================
-# Example 16
+# Example 17
 #
 
 from __future__ import print_function
@@ -61,50 +69,48 @@ import qwiic_serlcd
 import time
 import sys
 
+old_address = 0x72 # default
+new_address = 0x71 # must be within 0x07 to 0x78, DEFAULT: 0x72
+
 def runExample():
 
-	print("\nSparkFun Qwiic SerLCD   Example 16\n")
+	print("\nSparkFun Qwiic SerLCD   Example 17\n")
 	print("\nType CTRL+C to end.\n")
-	myLCD = qwiic_serlcd.QwiicSerlcd()
+	myLCD = qwiic_serlcd.QwiicSerlcd(address=old_address)
+
+	print("Attemping to connect to %s..." % hex(myLCD.address))
 
 	if myLCD.connected == False:
 		print("The Qwiic SerLCD device isn't connected to the system. Please check your connection", \
 			file=sys.stderr)
 		return
+	else:
+		print("Connected!")
+		myLCD.setBacklight(255, 255, 255) # bright white
+		myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
+		myLCD.begin() # call this for default settings (no
+		myLCD.leftToRight()
+		myLCD.noCursor()
+		time.sleep(1) # give a sec for system messages to complete
 
-	myLCD.setBacklight(255, 255, 255) # bright white
-	myLCD.setContrast(5) # set contrast. Lower to 0 for higher contrast.
-	myLCD.begin() # call this for default settings (no
-	myLCD.leftToRight()
-	myLCD.noCursor()
-	time.sleep(1) # give a sec for system messages to complete
+		myLCD.clearScreen()
 
-	myLCD.clearScreen()
-	myLCD.print("Tea-O-Matic")
-	time.sleep(1)
-
-	myLCD.saveSplash() # save this current text as the splash screen at next power up
-
-	myLCD.enableSplash() # This will cause the splash to be displayed at power on
-	#myLCD.disableSplash() # This will supress the splash from being displayed at power on
-
-	counter = 0
-
-	myLCD.clearScreen()
-	myLCD.print("Cups of tea: ")
-
-	while True:				
-		print("counter: %d" % counter)
-		myLCD.setCursor(0,1)
-		myLCD.print(str(counter))
-		counter = counter + 1
-		time.sleep(1)
+		myLCD.setAddress(new_address) # note this updates class member myLCD.address to the new_address
+		
+		if myLCD.connected == True:
+			print("Address changed to %s successfully!" % hex(myLCD.address))
+			myLCD.clearScreen()
+			myLCD.print("My new add: %s" % hex(myLCD.address))
+		else:
+			print("Address change failed :(")
+	while True:
+		time.sleep(1) # do nothing
 
 if __name__ == '__main__':
 	try:
 		runExample()
 	except (KeyboardInterrupt, SystemExit) as exErr:
-		print("\nEnding Example 16")
+		print("\nEnding Example 17")
 		sys.exit(0)
 
 

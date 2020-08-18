@@ -863,4 +863,5 @@ class QwiicSerlcd(object):
         # send the complete bytes (address, settings command , address command , new_addr byte)
         result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
         time.sleep(0.05)
+        self.address = new_addr # update our own address, so we can stil talk to the display
         return result
