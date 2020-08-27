@@ -1,5 +1,5 @@
 API Reference
 ==============
 
-.. automodule:: qwiic_dual_encoder_reader
+.. automodule:: qwiic_serlcd
    :members:
