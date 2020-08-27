@@ -21,9 +21,9 @@ Qwiic_SerLCD_Py
 
 <table class="table table-hover table-striped table-bordered">
     <tr align="center">
-        <td><a href="https://www.sparkfun.com/products/16396"><img src="https://cdn.sparkfun.com//assets/parts/1/1/9/2/5/14072-SparkFun_16x2_SerLCD_-_Black_on_RGB_3.3V-04.jpg" title="SparkFun SerLCD 16x2 - RGB Backlight (QWIIC)"></a></td>
-        <td><a href="https://www.sparkfun.com/products/16397"><img src="https://cdn.sparkfun.com//assets/parts/1/1/9/2/5/14072-SparkFun_16x2_SerLCD_-_Black_on_RGB_3.3V-04.jpg" title="SparkFun SerLCD 16x2 - RGB Text (QWIIC)"></a></td>
-        <td><a href="https://www.sparkfun.com/products/16398"><img src="https://cdn.sparkfun.com//assets/parts/1/1/9/2/5/14072-SparkFun_16x2_SerLCD_-_Black_on_RGB_3.3V-04.jpg" title="SparkFun SerLCD 20x2 - RGB Backlight (QWIIC)"></a></td>
+        <td><a href="https://www.sparkfun.com/products/16396"><img src="https://cdn.sparkfun.com//assets/parts/1/5/1/2/2/16396-SparkFun_16x2_SerLCD_-_RGB_Backlight__Qwiic_-05.jpg" title="SparkFun SerLCD 16x2 - RGB Backlight (QWIIC)"></a></td>
+        <td><a href="https://www.sparkfun.com/products/16397"><img src="https://cdn.sparkfun.com//assets/parts/1/5/1/2/3/16397-SparkFun_16x2_SerLCD_-_RGB_Backlight__Qwiic_-05.jpg" title="SparkFun SerLCD 16x2 - RGB Text (QWIIC)"></a></td>
+        <td><a href="https://www.sparkfun.com/products/16398"><img src="https://cdn.sparkfun.com//assets/parts/1/5/1/2/4/16398-SparkFun_16x2_SerLCD_-_RGB_Backlight__Qwiic_-05.jpg" title="SparkFun SerLCD 20x2 - RGB Backlight (QWIIC)"></a></td>
     </tr>
     <tr align="center">
         <td><i><a href="https://www.sparkfun.com/products/16396">SparkFun SerLCD 16x2 - RGB Backlight (QWIIC)</a></i></td>
