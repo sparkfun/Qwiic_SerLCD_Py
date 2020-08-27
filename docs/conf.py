@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'sparkfun_qwiic_dual_encoder_reader'
+project = 'sparkfun_qwiic_serlcd'
 copyright = '2020, SparkFun Electronics'
 author = 'SparkFun Electronics'
 
