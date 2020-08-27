@@ -1,7 +1,7 @@
 
 Basic Operation
 ---------------------------
-.. literalinclude:: ../examples/ex1_qwiic_dual_encoder_reader.py
-    :caption: examples/ex1_qwiic_dual_encoder_reader.py
+.. literalinclude:: ../examples/ex1_qwiic_serlcd_hello_world.py 
+    :caption: examples/ex1_qwiic_serlcd_hello_world.py 
     :linenos:
 
