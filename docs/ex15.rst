@@ -1,0 +1,7 @@
+
+Example 15: System Messages On/Off
+---------------------------
+.. literalinclude:: ../examples/ex15_qwiic_serlcd_message_enable.py
+    :caption: examples/ex15_qwiic_serlcd_message_enable.py
+    :linenos:
+

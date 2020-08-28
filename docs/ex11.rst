@@ -1,0 +1,7 @@
+
+Example 11: Text Direction
+---------------------------
+.. literalinclude:: ../examples/ex11_qwiic_serlcd_text_direction.py
+    :caption: examples/ex11_qwiic_serlcd_text_direction.py
+    :linenos:
+

@@ -1,0 +1,7 @@
+
+Example 17: Change I2C Address
+---------------------------
+.. literalinclude:: ../examples/ex17_qwiic_serlcd_change_i2c_address.py
+    :caption: examples/ex17_qwiic_serlcd_change_i2c_address.py
+    :linenos:
+

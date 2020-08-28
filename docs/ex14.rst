@@ -1,0 +1,7 @@
+
+Example 14: Firmware Version
+---------------------------
+.. literalinclude:: ../examples/ex14_qwiic_serlcd_show_firmware_version.py
+    :caption: examples/ex14_qwiic_serlcd_show_firmware_version.py
+    :linenos:
+

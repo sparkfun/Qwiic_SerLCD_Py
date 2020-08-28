@@ -1,0 +1,7 @@
+
+Example 13: Fast Backlight
+---------------------------
+.. literalinclude:: ../examples/ex13_qwiic_serlcd_fast_backlight.py
+    :caption: examples/ex13_qwiic_serlcd_fast_backlight.py
+    :linenos:
+

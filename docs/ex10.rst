@@ -1,0 +1,7 @@
+
+Example 10: Display On/Off
+---------------------------
+.. literalinclude:: ../examples/ex10_qwiic_serlcd_turn_off_display.py
+    :caption: examples/ex10_qwiic_serlcd_turn_off_display.py
+    :linenos:
+

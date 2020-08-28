@@ -1,0 +1,7 @@
+
+Example 16: Custom Splash
+---------------------------
+.. literalinclude:: ../examples/ex16_qwiic_serlcd_set_splash.py
+    :caption: examples/ex16_qwiic_serlcd_set_splash.py
+    :linenos:
+

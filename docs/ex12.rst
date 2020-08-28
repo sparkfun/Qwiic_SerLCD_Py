@@ -1,0 +1,7 @@
+
+Example 12: Console Input
+---------------------------
+.. literalinclude:: ../examples/ex12_qwiic_serlcd_console_input_to_display.py
+    :caption: examples/ex12_qwiic_serlcd_console_input_to_display.py
+    :linenos:
+
