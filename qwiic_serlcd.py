@@ -45,7 +45,7 @@
 #==================================================================================
 #
 # This is mostly a port of existing Arduino functionaly, so pylint is sad.
-# The goal is to keep the public interface pthonic, but internal is internal
+# The goal is to keep the public interface pythonic, but internal is internal.
 #
 # pylint: disable=line-too-long, too-many-public-methods, invalid-name
 #
@@ -60,7 +60,7 @@ Python module for the SparkFun SerLCD QWIIC products:
 [SparkFun 20x4 SerLCD - RGB Backlight (Qwiic)](https://www.sparkfun.com/products/16398)
 
 This python package enables the user to control the SerLCDs via I2C.
-It is intended to be used by simply plugging in a qwiic cable for power and I2C communicaiton.
+It is intended to be used by simply plugging in a qwiic cable for power and I2C communication.
 
 This package can be used in conjunction with the overall [SparkFun qwiic Python Package](https://github.com/sparkfun/Qwiic_Py)
 
@@ -82,7 +82,7 @@ import qwiic_i2c
 # The name of this device
 _DEFAULT_NAME = "SparkFun Qwiic SerLCD"
 
-# Some devices have multiple availabel addresses - this is a list of these addresses.
+# Some devices have multiple available addresses - this is a list of these addresses.
 # NOTE: The first address in this list is considered the default I2C address for the
 # device.
 _AVAILABLE_I2C_ADDRESS = [0x72] # default address, note it can be changed via software commands
@@ -143,10 +143,10 @@ def map(x, in_min, in_max, out_min, out_max):
         :param in_max: maximum of input range
         :param out_min: minimum of output range
         :param out_max: maximum of output range
-        
+
         :return: The value scaled to the new range
         :rtype: int
-    """    
+    """
     return int((x-in_min) * (out_max-out_min) / (in_max-in_min) + out_min)
 
 # define the class that encapsulates the device being created. All information associated with this
@@ -234,8 +234,8 @@ class QwiicSerlcd(object):
             Print a string of characters to the LCD
 
             :param string: The string you would like to print. Aka ASCII characters. example: "Hello"
-            
-            :return: Returns true if the I2C writes were successful, otherwise False.
+
+            :return: Returns True if the I2C writes were successful, otherwise False.
             :rtype: bool
 
         """
@@ -253,7 +253,7 @@ class QwiicSerlcd(object):
         """
             Sends the command to clear the screen
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -270,10 +270,10 @@ class QwiicSerlcd(object):
     def home(self):
         """
             Send the home command to the display.  This returns the cursor
-            to return to the beginning of the display, without clearing
+            to the beginning of the display, without clearing
             the display.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -291,13 +291,13 @@ class QwiicSerlcd(object):
 
             :param col: The column postion (0-19)
             :param row: The row postion (0-3)
-            
-            :return: Returns true if the I2C write was successful, otherwise False.
+
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
-        """        
+        """
         row_offsets = [0x00, 0x40, 0x14, 0x54]
-        
+
         # kepp variables in bounds
         row = max(0, row)            # row cannot be less than 0
         row = min(row, (MAX_ROWS - 1)) # row cannot be greater than max rows
@@ -318,8 +318,8 @@ class QwiicSerlcd(object):
             Set the contrast of the LCD screen (0-255)
 
             :param contrast: The new contrast value (0-255)
-            
-            :return: Returns true if the I2C write was successful, otherwise False.
+
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -332,8 +332,8 @@ class QwiicSerlcd(object):
         # so we need our "block of bytes" to include
         # CONTRAST_COMMAND and contrast value
 
-        block = [CONTRAST_COMMAND, contrast] 
-        
+        block = [CONTRAST_COMMAND, contrast]
+
         # send the complete bytes (address, settings command , contrast command, contrast value)
         result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
         time.sleep(0.01)
@@ -351,8 +351,8 @@ class QwiicSerlcd(object):
             :param red: The new red brightness value (0-255)
             :param green: The new green brightness value (0-255)
             :param blue: The new blue brightness value (0-255)
-            
-            :return: Returns true if the I2C write was successful, otherwise False.
+
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -384,12 +384,12 @@ class QwiicSerlcd(object):
         self._displayControl |= LCD_DISPLAYON
         block[8] = SPECIAL_COMMAND
         block[9] = (LCD_DISPLAYCONTROL | self._displayControl)
-        
+
         # send the complete bytes (address, settings command , contrast command, contrast value)
         result = self._i2c.writeBlock(self.address, SETTING_COMMAND, block)
         time.sleep(0.05)
         return result
-    
+
     # ----------------------------------
     # specialCommand()
     #
@@ -402,8 +402,8 @@ class QwiicSerlcd(object):
 
             :param command: Command to send (a single byte)
             :param count: Number of times to send the command (if ommited, then default is once)
-            
-            :return: Returns true if the I2C write was successful, otherwise False.
+
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -412,7 +412,7 @@ class QwiicSerlcd(object):
             result = self._i2c.writeByte(self.address, SPECIAL_COMMAND, command)
         time.sleep(0.05)
         return result
-    
+
     # ----------------------------------
     # command()
     #
@@ -425,7 +425,7 @@ class QwiicSerlcd(object):
 
             :param command: Command to send (a single byte)
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -443,7 +443,7 @@ class QwiicSerlcd(object):
 
             :param count: Number of character spaces you'd like to move
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -459,7 +459,7 @@ class QwiicSerlcd(object):
 
             :param count: Number of character spaces you'd like to move
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -473,7 +473,7 @@ class QwiicSerlcd(object):
         """
             Turn the underline cursor on.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -488,7 +488,7 @@ class QwiicSerlcd(object):
         """
             Turn the underline cursor off.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -503,7 +503,7 @@ class QwiicSerlcd(object):
         """
             Turn the blink cursor on.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -518,7 +518,7 @@ class QwiicSerlcd(object):
         """
             Turn the blink cursor off.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -535,7 +535,7 @@ class QwiicSerlcd(object):
 
             :param count: Number of character spaces you'd like to scroll
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -551,7 +551,7 @@ class QwiicSerlcd(object):
 
             :param count: Number of character spaces you'd like to scroll
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -565,7 +565,7 @@ class QwiicSerlcd(object):
         """
             Turn autoscrolling on. This will right-justify text from the cursor.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -580,7 +580,7 @@ class QwiicSerlcd(object):
         """
             Turn autoscrolling off.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -596,7 +596,7 @@ class QwiicSerlcd(object):
         """
             Set the text to flow from left to right.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -611,7 +611,7 @@ class QwiicSerlcd(object):
         """
             Set the text to flow from right to left
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -630,7 +630,7 @@ class QwiicSerlcd(object):
             :param location: character number 0 to 7
             :param charmap: byte array for character
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -661,7 +661,7 @@ class QwiicSerlcd(object):
             Write a customer character to the display
             :param location: character number 0 to 7
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -680,7 +680,7 @@ class QwiicSerlcd(object):
         """
             Turn the display on quickly.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -695,7 +695,7 @@ class QwiicSerlcd(object):
         """
             Turn the display off quickly.
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -716,7 +716,7 @@ class QwiicSerlcd(object):
             :param g: green backlight value 0-255
             :param b: blue backlight value 0-255
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -744,7 +744,7 @@ class QwiicSerlcd(object):
         """
             Enable system messages
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -763,7 +763,7 @@ class QwiicSerlcd(object):
         """
             Disable system messages
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -781,7 +781,7 @@ class QwiicSerlcd(object):
         """
             Enable splash screen at power on
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -799,7 +799,7 @@ class QwiicSerlcd(object):
         """
             Disable splash screen at power on
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -821,7 +821,7 @@ class QwiicSerlcd(object):
             Saves whatever is currently being displayed into EEPROM
             This will be displayed at next power on as the splash screen
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
@@ -848,7 +848,7 @@ class QwiicSerlcd(object):
             to unbrick the display.
             :param new_addr: new i2c address
 
-            :return: Returns true if the I2C write was successful, otherwise False.
+            :return: Returns True if the I2C write was successful, otherwise False.
             :rtype: bool
 
         """
