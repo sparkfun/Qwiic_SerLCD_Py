@@ -45,7 +45,6 @@
 # Example 10
 #
 
-from __future__ import print_function
 import qwiic_serlcd
 import time
 import sys
